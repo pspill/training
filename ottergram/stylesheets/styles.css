@@ -96,3 +96,14 @@ a[href="#"] {
 .detail-image {
     width: 90%;
 }
+@media all and (min-width: 768px) {
+    .main-content {
+        flex-direction: row;
+        overflow: hidden;
+    }
+    .thumbnail-list {
+        flex-direction: column;
+        order: 0;
+        margin-left: 20px;
+    }
+}
