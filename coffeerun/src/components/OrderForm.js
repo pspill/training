@@ -17,6 +17,12 @@ function OrderForm() {
   const [flavor, setFlavor] = useState('');
   const [strength, setStrength] = useState(30);
 
+  const sizes = [
+    { value: 'short', label: 'Short' },
+    { value: 'tall', label: 'Tall' },
+    { value: 'grande', label: 'Grande' },
+  ];
+
   return (
     <Card>
       <CardHeader>Order Form</CardHeader>
@@ -47,65 +53,45 @@ function OrderForm() {
           </FormGroup>
           <FormGroup tag="fieldset">
             <legend style={{ fontSize: '1rem' }}>Size</legend>
-            <FormGroup check inline>
-              <Input
-                type="radio"
-                name="size"
-                value="short"
-                id="size-short"
-                checked={size === 'short'}
-                onChange={(event) => setSize(event.target.value)}
-              />
-              <Label for="size-short" check>Short</Label>
-            </FormGroup>
-            <FormGroup check inline>
-              <Input
-                type="radio"
-                name="size"
-                value="tall"
-                id="size-tall"
-                checked={size === 'tall'}
-                onChange={(event) => setSize(event.target.value)}
-              />
-              <Label for="size-tall" check>Tall</Label>
-            </FormGroup>
-            <FormGroup check inline>
-              <Input
-                type="radio"
-                name="size"
-                value="grande"
-                id="size-grande"
-                checked={size === 'grande'}
-                onChange={(event) => setSize(event.target.value)}
-              />
-              <Label for="size-grande" check>Grande</Label>
-            </FormGroup>
-            <FormGroup>
-              <Label for="flavor">Flavor Shot</Label>
-              <Input
-                type="select"
-                id="flavor"
-                value={flavor}
-                onChange={(event) => setFlavor(event.target.value)}
-              >
-                <option value="">None</option>
-                <option value="caramel">Caramel</option>
-                <option value="almond">Almond</option>
-                <option value="mocha">Mocha</option>
-              </Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="strength">Strength</Label>
-              <Input
-                id="strength"
-                type="range"
-                min="0"
-                max="100"
-                step="1"
-                value={strength}
-                onChange={(event) => setStrength(parseInt(event.target.value, 10))}
-              />
-            </FormGroup>
+            {sizes.map(({ label, value }) => (
+              <FormGroup check inline key={value}>
+                <Input
+                  type="radio"
+                  name="size"
+                  value={value}
+                  id={`size-${label}`}
+                  checked={size === value}
+                  onChange={(event) => setSize(event.target.value)}
+                />
+                <Label for={`size-${label}`} check>{label}</Label>
+              </FormGroup>
+            ))}
+          </FormGroup>
+          <FormGroup>
+            <Label for="flavor">Flavor Shot</Label>
+            <Input
+              type="select"
+              id="flavor"
+              value={flavor}
+              onChange={(event) => setFlavor(event.target.value)}
+            >
+              <option value="">None</option>
+              <option value="caramel">Caramel</option>
+              <option value="almond">Almond</option>
+              <option value="mocha">Mocha</option>
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label for="strength">Strength</Label>
+            <Input
+              id="strength"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={strength}
+              onChange={(event) => setStrength(parseInt(event.target.value, 10))}
+            />
           </FormGroup>
           <Button color="primary" type="submit">Submit</Button>
           <Button className="float-right" color="danger" type="reset">Reset</Button>
