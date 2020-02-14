@@ -10,11 +10,12 @@ import {
   Input,
   Label,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const coffeeRegex = /^[a-zA-Z\s]+$/;
 const emailRegex = /^[\w.]+@([\w]+\.)+[\w]+$/;
 
-function OrderForm() {
+function OrderForm(props) {
   const [coffee, setCoffee] = useState('');
   const [coffeeError, setCoffeeError] = useState('');
   const [email, setEmail] = useState('');
@@ -36,6 +37,19 @@ function OrderForm() {
     setSize('short');
     setFlavor('');
     setStrength(30);
+  };
+
+  const submit = (event) => {
+    const newOrder = {
+      coffee,
+      emailAddress: email,
+      size,
+      flavor,
+      strength,
+    };
+    props.addOrder(newOrder);
+    reset();
+    event.preventDefault();
   };
 
   useEffect(() => {
@@ -66,7 +80,7 @@ function OrderForm() {
     <Card>
       <CardHeader>Order Form</CardHeader>
       <CardBody>
-        <Form>
+        <Form onSubmit={submit}>
           <FormGroup>
             <Label for="order">Coffee Order</Label>
             <Input
@@ -141,5 +155,9 @@ function OrderForm() {
     </Card>
   );
 }
+
+OrderForm.propTypes = {
+  addOrder: PropTypes.func.isRequired,
+};
 
 export default OrderForm;
