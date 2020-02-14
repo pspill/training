@@ -1,27 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Card,
   CardHeader,
   CardBody,
   Form,
+  FormFeedback,
   FormGroup,
   Input,
   Label,
 } from 'reactstrap';
 
+const coffeeRegex = /^[a-zA-Z\s]+$/;
+const emailRegex = /^[\w.]+@([\w]+\.)+[\w]+$/;
+
 function OrderForm() {
   const [coffee, setCoffee] = useState('');
-  const [email, setEmail] = useState('short');
-  const [size, setSize] = useState('');
+  const [coffeeError, setCoffeeError] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [size, setSize] = useState('short');
   const [flavor, setFlavor] = useState('');
   const [strength, setStrength] = useState(30);
+  const [validForm, setValidForm] = useState(false);
 
   const sizes = [
     { value: 'short', label: 'Short' },
     { value: 'tall', label: 'Tall' },
     { value: 'grande', label: 'Grande' },
   ];
+
+  const reset = () => {
+    setCoffee('');
+    setEmail('');
+    setSize('short');
+    setFlavor('');
+    setStrength(30);
+  };
+
+  useEffect(() => {
+    let error = '';
+    if (!coffee) {
+      error = 'An order is required.';
+    } else if (!coffeeRegex.test(coffee)) {
+      error = 'Your order may only contain letters and spaces.';
+    }
+    setCoffeeError(error);
+  }, [coffee]);
+
+  useEffect(() => {
+    let error = '';
+    if (!email) {
+      error = 'An email is required.';
+    } else if (!emailRegex.test(email)) {
+      error = 'Please enter a valid email.';
+    }
+    setEmailError(error);
+  }, [email]);
+
+  useEffect(() => {
+    setValidForm(!coffeeError);
+  }, [coffeeError]);
 
   return (
     <Card>
@@ -34,22 +73,24 @@ function OrderForm() {
               id="order"
               type="text"
               autoFocus
-              required
-              pattern="[a-zA-Z\s]+"
               value={coffee}
+              invalid={!!coffeeError}
+              valid={!coffeeError}
               onChange={(event) => setCoffee(event.target.value)}
             />
+            <FormFeedback>{coffeeError}</FormFeedback>
           </FormGroup>
           <FormGroup>
             <Label for="emailAddress">Email</Label>
             <Input
               id="emailAddress"
               type="email"
-              placeholder="who@dr.com"
-              required
               value={email}
+              invalid={!!emailError}
+              valid={!emailError}
               onChange={(event) => setEmail(event.target.value)}
             />
+            <FormFeedback>{emailError}</FormFeedback>
           </FormGroup>
           <FormGroup tag="fieldset">
             <legend style={{ fontSize: '1rem' }}>Size</legend>
@@ -93,8 +134,8 @@ function OrderForm() {
               onChange={(event) => setStrength(parseInt(event.target.value, 10))}
             />
           </FormGroup>
-          <Button color="primary" type="submit">Submit</Button>
-          <Button className="float-right" color="danger" type="reset">Reset</Button>
+          <Button color="primary" type="submit" disabled={!validForm}>Submit</Button>
+          <Button className="float-right" color="danger" onClick={reset}>Reset</Button>
         </Form>
       </CardBody>
     </Card>
