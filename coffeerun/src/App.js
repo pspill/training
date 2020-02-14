@@ -1,82 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
+  Collapse,
   Container,
-  Form,
-  FormGroup,
-  Input,
-  Label,
+  Nav,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  NavItem,
+  NavLink,
 } from 'reactstrap';
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink as RRNavLink,
+} from 'react-router-dom';
+import OrderForm from './components/OrderForm';
+import PendingOrders from './components/PendingOrders';
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
+
   return (
-    <Container>
-      <Card>
-        <CardHeader>Order Form</CardHeader>
-        <CardBody>
-          <Form>
-            <FormGroup>
-              <Label for="order">Coffee Order</Label>
-              <Input id="order" type="text" autoFocus />
-            </FormGroup>
-            <FormGroup>
-              <Label for="emailAddress">Email</Label>
-              <Input id="emailAddress" type="email" placeholder="who@dr.com" />
-            </FormGroup>
-            <FormGroup tag="fieldset">
-              <legend style={{ fontSize: '1rem' }}>Size</legend>
-              <FormGroup check inline>
-                <Input
-                  type="radio"
-                  name="size"
-                  value="short"
-                  id="size-short"
-                  defaultChecked
-                />
-                <Label for="size-short" check>Short</Label>
-              </FormGroup>
-              <FormGroup check inline>
-                <Input
-                  type="radio"
-                  name="size"
-                  value="tall"
-                  id="size-tall"
-                />
-                <Label for="size-tall" check>Tall</Label>
-              </FormGroup>
-              <FormGroup check inline>
-                <Input
-                  type="radio"
-                  name="size"
-                  value="grande"
-                  id="size-grande"
-                />
-                <Label for="size-grande" check>Grande</Label>
-              </FormGroup>
-              <FormGroup>
-                <Label for="flavor">Flavor Shot</Label>
-                <Input type="select" id="flavor">
-                  <option value="">None</option>
-                  <option value="caramel">Caramel</option>
-                  <option value="almond">Almond</option>
-                  <option value="mocha">Mocha</option>
-                </Input>
-              </FormGroup>
-              <FormGroup>
-                <Label for="strength">Strength</Label>
-                <Input id="strength" type="range" min="0" max="100" step="1" defaultValue="30" />
-              </FormGroup>
-            </FormGroup>
-            <Button color="primary" type="submit">Submit</Button>
-            <Button className="float-right" color="danger" type="reset">Reset</Button>
-          </Form>
-        </CardBody>
-      </Card>
-    </Container>
+    <Router>
+      <Navbar dark color="dark" expand="md" className="mb-4">
+        <NavbarBrand href="/">CoffeeRun</NavbarBrand>
+        <NavbarToggler onClick={toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="mr-auto" navbar>
+            <NavItem>
+              <NavLink tag={RRNavLink} exact to="/">Order Form</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={RRNavLink} to="/pending">Pending Orders</NavLink>
+            </NavItem>
+          </Nav>
+        </Collapse>
+      </Navbar>
+      <Container>
+        <Switch>
+          <Route path="/pending">
+            <PendingOrders />
+          </Route>
+          <Route exact path="/">
+            <OrderForm />
+          </Route>
+        </Switch>
+      </Container>
+    </Router>
   );
 }
 
