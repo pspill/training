@@ -1,26 +1,18 @@
-import { createStore } from 'redux';
+
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
 const initialState = {
-  pendingOrders: [
-    {
-      coffee: 'mocha',
-      emailAddress: 'jake@example.com',
-      size: 'small',
-      flavor: '',
-      strength: 30,
-    },
-    {
-      coffee: 'mocha',
-      emailAddress: 'loren@example.com',
-      size: 'grande',
-      flavor: 'caramel',
-      strength: 30,
-    },
-  ],
+  fetchingOrders: false,
+  pendingOrders: [],
 };
 
 export const COMPLETE_ORDER = 'COMPLETE_ORDER';
 export const SUBMIT_ORDER = 'SUBMIT_ORDER';
+export const START_ORDER_FETCH = 'START_ORDER_FETCH';
+export const FINISH_ORDER_FETCH = 'FINISH_ORDER_FETCH';
+export const foo = 'foo2';
 
 function orders(state, action) {
   switch (action.type) {
@@ -36,6 +28,10 @@ function orders(state, action) {
           (order) => order.emailAddress !== action.emailAddress,
         ),
       };
+    case FINISH_ORDER_FETCH:
+      return { ...state, fetchingOrders: false, pendingOrders: action.orders }
+    case START_ORDER_FETCH:
+      return { ...state, fetchingOrders: true }
 
     default:
       return state;
@@ -45,6 +41,5 @@ function orders(state, action) {
 export default createStore(
   orders,
   initialState,
-  // eslint-disable-next-line no-underscore-dangle
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  composeWithDevTools(applyMiddleware(thunk))
 );

@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SUBMIT_ORDER } from '../store';
+import { submitOrder } from '../actions';
 
 const coffeeRegex = /^[a-zA-Z\s]+$/;
 const emailRegex = /^[\w.]+@([\w]+\.)+[\w]+$/;
@@ -49,10 +49,7 @@ function OrderForm(props) {
       flavor,
       strength,
     };
-    props.dispatch({
-      type: SUBMIT_ORDER,
-      order: newOrder,
-    });
+    props.dispatch(submitOrder(newOrder));
     reset();
     event.preventDefault();
   };
