@@ -20,32 +20,6 @@ import PendingOrders from './components/PendingOrders';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
-  const [orders, setOrders] = useState([
-    {
-      coffee: 'mocha',
-      emailAddress: 'jake@example.com',
-      size: 'small',
-      flavor: '',
-      strength: 30,
-    },
-    {
-      coffee: 'mocha',
-      emailAddress: 'loren@example.com',
-      size: 'grande',
-      flavor: 'caramel',
-      strength: 30,
-    },
-  ]);
-
-  const addOrder = (newOrder) => {
-    setOrders((currentOrders) => [...currentOrders, newOrder]);
-  };
-
-  const completeOrder = (emailAddress) => {
-    setOrders(
-      (currentOrders) => currentOrders.filter((order) => order.emailAddress !== emailAddress),
-    );
-  };
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -68,10 +42,10 @@ function App() {
       <Container>
         <Switch>
           <Route path="/pending">
-            <PendingOrders pendingOrders={orders} completeOrder={completeOrder} />
+            <PendingOrders />
           </Route>
           <Route exact path="/">
-            <OrderForm addOrder={addOrder} />
+            <OrderForm />
           </Route>
         </Switch>
       </Container>
