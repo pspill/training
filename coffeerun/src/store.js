@@ -29,9 +29,9 @@ function orders(state, action) {
         ),
       };
     case FINISH_ORDER_FETCH:
-      return { ...state, fetchingOrders: false, pendingOrders: action.orders }
+      return { ...state, fetchingOrders: false, pendingOrders: action.orders };
     case START_ORDER_FETCH:
-      return { ...state, fetchingOrders: true }
+      return { ...state, fetchingOrders: true };
 
     default:
       return state;
@@ -41,5 +41,5 @@ function orders(state, action) {
 export default createStore(
   orders,
   initialState,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(thunk)),
 );
